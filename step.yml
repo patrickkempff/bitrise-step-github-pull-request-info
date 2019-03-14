@@ -10,7 +10,7 @@
 title: |-
   GitHub Pull Request Info
 summary: |
-  Get the title and description of a GitHub Pull Requestx
+  Get the title and description of a GitHub Pull Request
 description: |
   Get the title and description of a GitHub Pull Request
 website: https://github.com/patrickkempff/bitrise-step-github-pull-request-info
