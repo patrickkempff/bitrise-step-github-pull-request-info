@@ -107,6 +107,14 @@ outputs:
         Title of the GitHub Pull Request
   - BITRISE_GITHUB_PULL_REQUEST_INFO_BODY:
     opts:
-      title: Description
+      title: GitHub Markdown enabled description
       description: |-
         Body of the GitHub Pull Request
+
+  - BITRISE_GITHUB_PULL_REQUEST_INFO_BODY_FOR_SLACK:
+    opts:
+      title: Slack friendly description
+      description: |-
+        Body of the GitHub Pull Request but 'slackified'      
+
+        

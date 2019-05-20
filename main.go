@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -10,6 +11,9 @@ import (
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-tools/go-steputils/stepconf"
 	"github.com/bitrise-tools/go-steputils/tools"
+
+	slackdown "github.com/patrickkempff/blackfriday-slack"
+	bf "gopkg.in/russross/blackfriday.v2"
 )
 
 // Config - variables should be defined in bitrise secrets.
@@ -70,6 +74,15 @@ func main() {
 
 	if err := tools.ExportEnvironmentWithEnvman("BITRISE_GITHUB_PULL_REQUEST_INFO_BODY", result.Body); err != nil {
 		log.Errorf("Failed to generate output")
+	}
+
+	renderer := &slackdown.Renderer{}
+	md := bf.New(bf.WithRenderer(renderer), bf.WithExtensions(slackdown.DefaultExtensions))
+	ast := md.Parse(bytes.Replace([]byte(result.Body), []byte("\r"), nil, -1))
+	output := string(renderer.Render(ast))
+
+	if err := tools.ExportEnvironmentWithEnvman("BITRISE_GITHUB_PULL_REQUEST_INFO_BODY_FOR_SLACK", output); err != nil {
+		log.Errorf("Failed to generate slack output")
 	}
 
 	defer resp.Body.Close()
